@@ -67,24 +67,6 @@ public class UserWizardController {
 		Boolean hideWizardLoggedInSessionB = userExpandoHelper.get(EXPANDO_VALUE_HIDE_RP_WIZARD_LOGGED_IN_SESSION, companyId, userId);
 		boolean hideWizardLoggedInSession =  (hideWizardLoggedInSessionB != null) ? hideWizardLoggedInSessionB.booleanValue() : false;
 		
-		/*
-        PortletPreferences prefs = request.getPreferences();
-
-        String csIframPage = prefs.getValue("csIframePage", "");
-        String portletInstance = prefs.getValue("portalInstance", "");
-
-        String userId = lookupUid(request);
-        if (userId != "") {
-            model.addAttribute("userSites",
-                    alfrescoService.getSitesByUser(userId, csIframPage, portletInstance));
-            model.addAttribute("publicSites",
-                    alfrescoService.getPublicSites(userId, csIframPage, portletInstance));
-            return "view";
-        }
-
-        return "notloggedin";
-		*/
-    	
     	model.addAttribute("contextPath", request.getContextPath());
     	model.addAttribute("hideWizard", hideWizard);
     	model.addAttribute("hideWizardLoggedInSession", hideWizardLoggedInSession);
@@ -108,24 +90,6 @@ public class UserWizardController {
     	
     	long scopeGroupId = themeDisplay.getScopeGroupId();
 
-		/*
-        PortletPreferences prefs = request.getPreferences();
-
-        String csIframPage = prefs.getValue("csIframePage", "");
-        String portletInstance = prefs.getValue("portalInstance", "");
-
-        String userId = lookupUid(request);
-        if (userId != "") {
-            model.addAttribute("userSites",
-                    alfrescoService.getSitesByUser(userId, csIframPage, portletInstance));
-            model.addAttribute("publicSites",
-                    alfrescoService.getPublicSites(userId, csIframPage, portletInstance));
-            return "view";
-        }
-
-        return "notloggedin";
-		*/
-    	
         PortletPreferences prefs = request.getPreferences();
         String wizardArticleIdStr = prefs.getValue("wizardArticleId", "");
 

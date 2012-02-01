@@ -17,15 +17,20 @@
 	<portlet:param name="action" value="savePref" />
 </portlet:actionURL>
 
-<liferay-portlet:renderURL portletMode="VIEW" var="backURL" />
+<portlet:renderURL portletMode="view" var="backURL" />
 
 <aui:form action="${savePrefURL}" name="prefsForm" method="post" cssClass="">
 
   <aui:input name="wizardArticleId" type="text" label="ArtikelID f&ouml;r wizard" value="${wizardArticleId}" />
+  <c:if test="${isEditResponse and not postedWizardArticleExists}">
+  	<div class="portlet-msg-error">
+  		Det finns ingen artikel med det artikel-id (${postedWizardArticleId}) du f&ouml;rs&ouml;kte spara. Kolla s&aring; att det verkligen finns en s&aring;dan artikel och f&ouml;rs&ouml;k igen.
+  	</div>
+  </c:if>
 
   <aui:button-row>
     <aui:button type="submit" name="save" />
-    <aui:button onClick="${backURL}" type="cancel" name="back" />
+    <aui:button onClick="window.location='${backURL}'" type="cancel" name="back" />
   </aui:button-row>
 
 </aui:form>
