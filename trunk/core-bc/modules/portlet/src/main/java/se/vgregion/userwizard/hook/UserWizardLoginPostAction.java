@@ -36,6 +36,7 @@ public class UserWizardLoginPostAction  extends Action {
 
         User user = lookupUser(request);
         if (user == null) {
+        	_log.info("UserWizardLoginPostAction user is null.");
             return;
         }
 
@@ -75,9 +76,9 @@ public class UserWizardLoginPostAction  extends Action {
      * @comment Should be seperated into a service            
      */
     private void resetUserWizardLoggedInSession(User user) {
-    	long companyId = user.getCompanyId();
-    	long userId = user.getUserId();
-    	userExpandoHelper.set(EXPANDO_VALUE_HIDE_RP_WIZARD_LOGGED_IN_SESSION, false, companyId, userId);
+    	_log.info("UserWizardLoginPostAction resetUserWizardLoggedInSession");
+    	
+    	userExpandoHelper.set(EXPANDO_VALUE_HIDE_RP_WIZARD_LOGGED_IN_SESSION, false, user);
     }
 
     private void init() {
