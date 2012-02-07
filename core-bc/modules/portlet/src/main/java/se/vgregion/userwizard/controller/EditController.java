@@ -60,6 +60,18 @@ public class EditController {
         return "edit";
     }
 
+    /*
+     * Sets article value for wizard article in portlet preferences
+     * 
+     * @comment
+     * If portlet needs to be used on multiple pages with the same setting,
+     * the implementation should be changed from portlet preferences to
+     * setting the articleId value as an expandoValue for the company.
+     * To to this, use the CommunityExpandoHelper or CompanyExpandoHelper class
+     * After such a change, update doEdit above, and UserWizardController viewWizard
+     * 
+     * 
+     * */
     @ActionMapping(params = "action=savePref")
     public void savePref(ActionRequest request, ActionResponse response) {
     	
