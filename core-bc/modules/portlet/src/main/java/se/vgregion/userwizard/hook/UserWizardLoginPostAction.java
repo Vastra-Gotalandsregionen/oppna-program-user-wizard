@@ -41,10 +41,8 @@ public class UserWizardLoginPostAction  extends Action {
         }
 
         try {
-        } catch (Exception e) {
-        	
         	resetUserWizardLoggedInSession(user);
-        	
+        } catch (Exception e) {
             log(e.getMessage(), e);
         } finally {
         }
