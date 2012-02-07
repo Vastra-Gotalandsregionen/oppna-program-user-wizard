@@ -61,6 +61,12 @@ public class UserWizardController {
 		long companyId = themeDisplay.getCompanyId();
 		long userId = themeDisplay.getUserId();
 		
+		
+		String sessionFoo = (String)request.getPortletSession().getAttribute("foo");
+		
+		_log.info("UserWizardController viewDefault sessionFoo has value: " + sessionFoo);
+		
+		
 		Boolean hideWizardB = userExpandoHelper.get(EXPANDO_VALUE_HIDE_RP_WIZARD, companyId, userId);
 		boolean hideWizard =  (hideWizardB != null) ? hideWizardB.booleanValue() : false;
 		
@@ -177,7 +183,10 @@ public class UserWizardController {
         	
         	boolean hideWizardLoggedInSession = ParamUtil.getBoolean(request, "hideWizardLoggedInSession", false);
         	
-        	userExpandoHelper.set(EXPANDO_VALUE_HIDE_RP_WIZARD_LOGGED_IN_SESSION, hideWizardLoggedInSession, companyId, userId);
+        	//userExpandoHelper.set(EXPANDO_VALUE_HIDE_RP_WIZARD_LOGGED_IN_SESSION, hideWizardLoggedInSession, companyId, userId);
+        	
+        	request.getPortletSession().setAttribute("foo", "bar");
+        	
         	
         	response.getWriter().append("{success: true, msg: 'success'}");
 
