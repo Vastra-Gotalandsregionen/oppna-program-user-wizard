@@ -8,8 +8,6 @@
 
   <context:annotation-config/>
 
-  <bean id="userUpdateService" class="se.vgregion.userupdate.svc.UserUpdateService" />
-
   <bean id="userExpandoHelper" class="se.vgregion.liferay.expando.UserExpandoHelperImpl" />
 
   <bean id="expandoUtil" class="se.vgregion.liferay.expando.ExpandoUtil" />
