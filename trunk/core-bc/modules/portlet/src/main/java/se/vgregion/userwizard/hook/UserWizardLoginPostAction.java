@@ -63,7 +63,7 @@ public class UserWizardLoginPostAction  extends Action {
 
     private ApplicationContext getApplicationContext() {
         if (applicationContext == null) {
-            applicationContext = new ClassPathXmlApplicationContext("applicationContext.xml");
+            applicationContext = new ClassPathXmlApplicationContext("userwizard-hook-application-context.xml");
         }
         return applicationContext;
     }
