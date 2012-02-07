@@ -3,8 +3,11 @@ package se.vgregion.userwizard.hook;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import se.vgregion.liferay.expando.UserExpandoHelper;
 
 import com.liferay.portal.kernel.events.Action;
 import com.liferay.portal.kernel.events.ActionException;
@@ -14,17 +17,22 @@ import com.liferay.portal.model.User;
 import com.liferay.portal.service.UserLocalService;
 
 public class UserWizardLoginPostAction  extends Action {
+	
+	@Autowired
+    private UserExpandoHelper userExpandoHelper;
 
 	private static Log _log = LogFactoryUtil.getLog(UserWizardLoginPostAction.class);
 	
     private ApplicationContext applicationContext;
     private UserLocalService userLocalService;
+    
+    private static final String EXPANDO_VALUE_HIDE_RP_WIZARD_LOGGED_IN_SESSION = "hide_rp_wizard_logged_in_session";
 		
     @Override
     public void run(HttpServletRequest request, HttpServletResponse response) throws ActionException {
         init();
         
-        _log.info("UserWizardLoginPostAction");
+        _log.info("UserWizardLoginPostAction.");
 
         User user = lookupUser(request);
         if (user == null) {
@@ -33,6 +41,9 @@ public class UserWizardLoginPostAction  extends Action {
 
         try {
         } catch (Exception e) {
+        	
+        	resetUserWizardLoggedInSession(user);
+        	
             log(e.getMessage(), e);
         } finally {
         }
@@ -53,6 +64,20 @@ public class UserWizardLoginPostAction  extends Action {
             log(msg, ex);
         }
         return null;
+    }
+    
+    /**
+     * Sets the expando value "hide_rp_wizard_logged_in_session" to false for a Liferay user.
+     * 
+     * @param user
+     *            the Liferay user to update
+     * 
+     * @comment Should be seperated into a service            
+     */
+    private void resetUserWizardLoggedInSession(User user) {
+    	long companyId = user.getCompanyId();
+    	long userId = user.getUserId();
+    	userExpandoHelper.set(EXPANDO_VALUE_HIDE_RP_WIZARD_LOGGED_IN_SESSION, false, companyId, userId);
     }
 
     private void init() {
