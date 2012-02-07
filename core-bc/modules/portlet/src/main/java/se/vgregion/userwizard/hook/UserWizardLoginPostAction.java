@@ -22,16 +22,11 @@ import com.liferay.portlet.expando.service.ExpandoValueLocalService;
 
 public class UserWizardLoginPostAction  extends Action {
 	
-	@Autowired
-    private UserExpandoHelper userExpandoHelper;
-	
-	@Autowired
-	private ExpandoValueLocalService expandoValueLocalService;
-
 	private static Log _log = LogFactoryUtil.getLog(UserWizardLoginPostAction.class);
 	
     private ApplicationContext applicationContext;
     private UserLocalService userLocalService;
+    private ExpandoValueLocalService expandoValueLocalService;
     
     private static final String EXPANDO_VALUE_HIDE_RP_WIZARD_LOGGED_IN_SESSION = "hide_rp_wizard_logged_in_session";
 		
@@ -81,54 +76,27 @@ public class UserWizardLoginPostAction  extends Action {
      * @comment Should be separated into a service            
      */
     private void resetUserWizardLoggedInSession(User user) {
-    	_log.info("UserWizardLoginPostAction - resetUserWizardLoggedInSession.");
-    	
     	long companyId = user.getCompanyId();
     	long userId = user.getUserId();
     	
     	try {
     		
-    		boolean valBefore = expandoValueLocalService.getData(companyId, User.class.getName(), ExpandoTableConstants.DEFAULT_TABLE_NAME, 
-    			EXPANDO_VALUE_HIDE_RP_WIZARD_LOGGED_IN_SESSION, userId, false);
-    		
-    		_log.info("UserWizardLoginPostAction - resetUserWizardLoggedInSession - valBefore is: " + valBefore);
-    		
 			expandoValueLocalService.addValue(companyId, User.class.getName(), ExpandoTableConstants.DEFAULT_TABLE_NAME,
 						EXPANDO_VALUE_HIDE_RP_WIZARD_LOGGED_IN_SESSION, userId, false);
-			
-    		boolean valAfter = expandoValueLocalService.getData(companyId, User.class.getName(), ExpandoTableConstants.DEFAULT_TABLE_NAME, 
-        			EXPANDO_VALUE_HIDE_RP_WIZARD_LOGGED_IN_SESSION, userId, false);
-        		
-        		_log.info("UserWizardLoginPostAction - resetUserWizardLoggedInSession - valAfter is: " + valAfter);
-			
-			
 		} catch (PortalException e) {
 			_log.error(e, e);
 		} catch (SystemException e) {
 			_log.error(e, e);
 		}
-    	
-    	/*
-    	_log.info("UserWizardLoginPostAction resetUserWizardLoggedInSession. companyId is: " + companyId + " and userId is: " + userId);
-    	
-    	Boolean hideWizardLoggedInSessionB = userExpandoHelper.get(EXPANDO_VALUE_HIDE_RP_WIZARD_LOGGED_IN_SESSION, companyId, userId);
-    	boolean hideWizardLoggedInSession =  (hideWizardLoggedInSessionB != null) ? hideWizardLoggedInSessionB.booleanValue() : false;
-    	
-    	_log.info("resetUserWizardLoggedInSession - hideWizardLoggedInSession before set is: " + hideWizardLoggedInSession);
-    	
-    	userExpandoHelper.set(EXPANDO_VALUE_HIDE_RP_WIZARD_LOGGED_IN_SESSION, false, companyId, userId);
-    	
-    	Boolean hideWizardLoggedInSessionB2 = userExpandoHelper.get(EXPANDO_VALUE_HIDE_RP_WIZARD_LOGGED_IN_SESSION, companyId, userId);
-    	boolean hideWizardLoggedInSession2 =  (hideWizardLoggedInSessionB2 != null) ? hideWizardLoggedInSessionB2.booleanValue() : false;
-    	
-    	
-    	_log.info("resetUserWizardLoggedInSession - hideWizardLoggedInSession after set is: " + hideWizardLoggedInSession2);
-    	*/
     }
 
     private void init() {
         if (userLocalService == null) {
             userLocalService = (UserLocalService) getApplicationContext().getBean("userLocalService");
+        }
+        
+        if(expandoValueLocalService == null) {
+        	expandoValueLocalService = (ExpandoValueLocalService) getApplicationContext().getBean("expandoValueLocalService");
         }
     }
 
