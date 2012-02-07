@@ -3,19 +3,19 @@ package se.vgregion.userwizard.hook;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.liferay.portal.kernel.events.Action;
 import com.liferay.portal.kernel.events.ActionException;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.UserLocalService;
 
 public class UserWizardLoginPostAction  extends Action {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(UserWizardLoginPostAction.class);
+	private static Log _log = LogFactoryUtil.getLog(UserWizardLoginPostAction.class);
 	
     private ApplicationContext applicationContext;
     private UserLocalService userLocalService;
@@ -24,7 +24,7 @@ public class UserWizardLoginPostAction  extends Action {
     public void run(HttpServletRequest request, HttpServletResponse response) throws ActionException {
         init();
         
-        LOGGER.info("UserWizardLoginPostAction");
+        _log.info("UserWizardLoginPostAction");
 
         User user = lookupUser(request);
         if (user == null) {
@@ -69,10 +69,10 @@ public class UserWizardLoginPostAction  extends Action {
     }
 
     private void log(String msg, Throwable ex) {
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.warn(msg, ex);
+        if (_log.isDebugEnabled()) {
+        	_log.warn(msg, ex);
         } else {
-            LOGGER.warn(msg);
+        	_log.warn(msg);
         }
     }
 	
