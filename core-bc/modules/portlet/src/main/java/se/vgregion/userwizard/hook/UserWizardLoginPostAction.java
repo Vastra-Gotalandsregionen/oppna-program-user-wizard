@@ -11,15 +11,22 @@ import se.vgregion.liferay.expando.UserExpandoHelper;
 
 import com.liferay.portal.kernel.events.Action;
 import com.liferay.portal.kernel.events.ActionException;
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.UserLocalService;
+import com.liferay.portlet.expando.model.ExpandoTableConstants;
+import com.liferay.portlet.expando.service.ExpandoValueLocalService;
 
 public class UserWizardLoginPostAction  extends Action {
 	
 	@Autowired
     private UserExpandoHelper userExpandoHelper;
+	
+	@Autowired
+	private ExpandoValueLocalService expandoValueLocalService;
 
 	private static Log _log = LogFactoryUtil.getLog(UserWizardLoginPostAction.class);
 	
@@ -32,7 +39,7 @@ public class UserWizardLoginPostAction  extends Action {
     public void run(HttpServletRequest request, HttpServletResponse response) throws ActionException {
         init();
         
-        _log.info("UserWizardLoginPostAction.");
+        _log.info("UserWizardLoginPostAction...");
 
         User user = lookupUser(request);
         if (user == null) {
@@ -71,12 +78,52 @@ public class UserWizardLoginPostAction  extends Action {
      * @param user
      *            the Liferay user to update
      * 
-     * @comment Should be seperated into a service            
+     * @comment Should be separated into a service            
      */
     private void resetUserWizardLoggedInSession(User user) {
-    	_log.info("UserWizardLoginPostAction resetUserWizardLoggedInSession");
+    	_log.info("UserWizardLoginPostAction - resetUserWizardLoggedInSession.");
     	
-    	userExpandoHelper.set(EXPANDO_VALUE_HIDE_RP_WIZARD_LOGGED_IN_SESSION, false, user);
+    	long companyId = user.getCompanyId();
+    	long userId = user.getUserId();
+    	
+    	try {
+    		
+    		boolean valBefore = expandoValueLocalService.getData(companyId, User.class.getName(), ExpandoTableConstants.DEFAULT_TABLE_NAME, 
+    			EXPANDO_VALUE_HIDE_RP_WIZARD_LOGGED_IN_SESSION, userId, false);
+    		
+    		_log.info("UserWizardLoginPostAction - resetUserWizardLoggedInSession - valBefore is: " + valBefore);
+    		
+			expandoValueLocalService.addValue(companyId, User.class.getName(), ExpandoTableConstants.DEFAULT_TABLE_NAME,
+						EXPANDO_VALUE_HIDE_RP_WIZARD_LOGGED_IN_SESSION, userId, false);
+			
+    		boolean valAfter = expandoValueLocalService.getData(companyId, User.class.getName(), ExpandoTableConstants.DEFAULT_TABLE_NAME, 
+        			EXPANDO_VALUE_HIDE_RP_WIZARD_LOGGED_IN_SESSION, userId, false);
+        		
+        		_log.info("UserWizardLoginPostAction - resetUserWizardLoggedInSession - valAfter is: " + valAfter);
+			
+			
+		} catch (PortalException e) {
+			_log.error(e, e);
+		} catch (SystemException e) {
+			_log.error(e, e);
+		}
+    	
+    	/*
+    	_log.info("UserWizardLoginPostAction resetUserWizardLoggedInSession. companyId is: " + companyId + " and userId is: " + userId);
+    	
+    	Boolean hideWizardLoggedInSessionB = userExpandoHelper.get(EXPANDO_VALUE_HIDE_RP_WIZARD_LOGGED_IN_SESSION, companyId, userId);
+    	boolean hideWizardLoggedInSession =  (hideWizardLoggedInSessionB != null) ? hideWizardLoggedInSessionB.booleanValue() : false;
+    	
+    	_log.info("resetUserWizardLoggedInSession - hideWizardLoggedInSession before set is: " + hideWizardLoggedInSession);
+    	
+    	userExpandoHelper.set(EXPANDO_VALUE_HIDE_RP_WIZARD_LOGGED_IN_SESSION, false, companyId, userId);
+    	
+    	Boolean hideWizardLoggedInSessionB2 = userExpandoHelper.get(EXPANDO_VALUE_HIDE_RP_WIZARD_LOGGED_IN_SESSION, companyId, userId);
+    	boolean hideWizardLoggedInSession2 =  (hideWizardLoggedInSessionB2 != null) ? hideWizardLoggedInSessionB2.booleanValue() : false;
+    	
+    	
+    	_log.info("resetUserWizardLoggedInSession - hideWizardLoggedInSession after set is: " + hideWizardLoggedInSession2);
+    	*/
     }
 
     private void init() {
