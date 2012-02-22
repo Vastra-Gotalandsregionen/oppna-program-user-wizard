@@ -46,7 +46,7 @@ AUI().add('vgr-user-wizard',function(A) {
 			ATTRS: {
 			
 				dialogHeight: {
-					value: 400
+					value: 410
 				},
 				
 				dialogWidth: {
@@ -84,7 +84,7 @@ AUI().add('vgr-user-wizard',function(A) {
 					instance.messages.dialog.personalizeText = 'Genom att &auml;ndra och skruva p&aring; inst&auml;llningarna kan du personalisera portalen och anpassa den efter just dina behov. Och helt enkelt g&ouml;ra din vardag lite enklare.';
 					instance.messages.dialog.profileLinkText = 'G&aring; till min profil';
 					instance.messages.dialog.controlText = 'Visa denna information n&auml;sta g&aring;ng jag loggar in';
-					
+					instance.messages.dialog.close = 'St&auml;ng';
 					
 					var wizardContentURL = instance.get(WIZARD_CONTENT_URL);
 					wizardContentURL = wizardContentURL.replace('&p_p_state=normal', '&p_p_state=exclusive');
@@ -118,13 +118,21 @@ AUI().add('vgr-user-wizard',function(A) {
 						centered: true,
 						constrain2view: true,
 						cssClass: CSS_USER_WIZARD_DIALOG,
-						destroyOnClose: true,
+						destroyOnClose: false, //http://issues.liferay.com/browse/AUI-393 setting this to true results in "this.fn is null"
 						height: instance.get(DIALOG_HEIGHT),
 						modal: true,
 						resizable: false,
 						width: instance.get(DIALOG_WIDTH),
 						title: instance.messages.dialog.title,
-						zIndex: 1000
+						zIndex: 1000,
+						buttons: [
+			                        {
+				                        text: instance.messages.dialog.close,
+				                        handler: function() {
+					                        this.close();
+				                        }
+			                        }
+			            ]
 					}).render();
 					
 					wizardDialog.on('render', instance._onWizardDialogRender, instance, wizardDialog);
