@@ -11,12 +11,12 @@ Generation time : 2012-01-04 11:41:12 CET
   <parent>
     <groupId>se.vgregion.user-wizard</groupId>
     <artifactId>user-wizard-system</artifactId>
-    <version>1.0</version>
+    <version>1.1-SNAPSHOT</version>
   </parent>
   <groupId>se.vgregion.user-wizard</groupId>
   <artifactId>user-wizard-core-bc</artifactId>
   <packaging>pom</packaging>
-  <version>1.0</version>
+  <version>1.1-SNAPSHOT</version>
   <name>${project.artifactId}</name>
 
   <modules>
