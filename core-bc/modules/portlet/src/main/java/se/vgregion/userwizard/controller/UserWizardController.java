@@ -1,8 +1,5 @@
 package se.vgregion.userwizard.controller;
 
-/**
- * 
- */
 import javax.portlet.PortletException;
 import javax.portlet.PortletPreferences;
 import javax.portlet.RenderRequest;
