@@ -23,13 +23,11 @@
     <module>core-bc</module>
   </modules>
 
-  <!--NB! SCM config below assumes system name equals VGR subversion/googlecode project name! -->
-  <!-- Open Source repo -->
-  <!--
+
   <scm>
     <developerConnection>scm:svn:https://oppna-program-user-wizard.googlecode.com/svn/trunk</developerConnection>
     <url>http://oppna-program-user-wizard.googlecode.com/svn/trunk</url>
   </scm>
-  -->
+
 
 </project>
