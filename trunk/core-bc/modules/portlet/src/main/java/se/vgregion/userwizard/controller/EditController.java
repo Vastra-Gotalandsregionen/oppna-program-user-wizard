@@ -1,6 +1,3 @@
-/**
- * 
- */
 package se.vgregion.userwizard.controller;
 
 import java.io.IOException;
