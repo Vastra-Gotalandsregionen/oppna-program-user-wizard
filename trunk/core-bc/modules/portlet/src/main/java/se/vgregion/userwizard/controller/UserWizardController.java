@@ -35,12 +35,11 @@ import com.liferay.portlet.journal.service.JournalArticleLocalService;
 @RequestMapping(value = "VIEW")
 public class UserWizardController {
 
-	@Autowired
+    @Autowired
     private UserExpandoHelper userExpandoHelper;
-	
-	@Autowired
+
+    @Autowired
     private JournalArticleLocalService journalArticleLocalService;
-	
 
     /**
      * Renders the User Wizard Default View.
@@ -53,25 +52,26 @@ public class UserWizardController {
      */
     @RenderMapping
     public String viewDefault(Model model, RenderRequest request) {
-    	
-		ThemeDisplay themeDisplay =(ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
-		long companyId = themeDisplay.getCompanyId();
-		long userId = themeDisplay.getUserId();
-		
-		
-		Boolean hideWizardB = userExpandoHelper.get(EXPANDO_VALUE_HIDE_RP_WIZARD, companyId, userId);
-		boolean hideWizard =  (hideWizardB != null) ? hideWizardB.booleanValue() : false;
-		
-		Boolean hideWizardLoggedInSessionB = userExpandoHelper.get(EXPANDO_VALUE_HIDE_RP_WIZARD_LOGGED_IN_SESSION, companyId, userId);
-		boolean hideWizardLoggedInSession =  (hideWizardLoggedInSessionB != null) ? hideWizardLoggedInSessionB.booleanValue() : false;
-		
-    	model.addAttribute("contextPath", request.getContextPath());
-    	model.addAttribute("hideWizard", hideWizard);
-    	model.addAttribute("hideWizardLoggedInSession", hideWizardLoggedInSession);
-    	
-		return "view";
+
+        ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
+        long companyId = themeDisplay.getCompanyId();
+        long userId = themeDisplay.getUserId();
+
+        Boolean hideWizardB = userExpandoHelper.get(EXPANDO_VALUE_HIDE_RP_WIZARD, companyId, userId);
+        boolean hideWizard = (hideWizardB != null) ? hideWizardB.booleanValue() : false;
+
+        Boolean hideWizardLoggedInSessionB =
+                userExpandoHelper.get(EXPANDO_VALUE_HIDE_RP_WIZARD_LOGGED_IN_SESSION, companyId, userId);
+        boolean hideWizardLoggedInSession =
+                (hideWizardLoggedInSessionB != null) ? hideWizardLoggedInSessionB.booleanValue() : false;
+
+        model.addAttribute("contextPath", request.getContextPath());
+        model.addAttribute("hideWizard", hideWizard);
+        model.addAttribute("hideWizardLoggedInSession", hideWizardLoggedInSession);
+
+        return "view";
     }
-    
+
     /**
      * Renders the User Wizard Wizard View.
      * 
@@ -83,49 +83,49 @@ public class UserWizardController {
      */
     @RenderMapping(params = "view=viewWizard")
     public String viewWizard(Model model, RenderRequest request) {
-    	
-    	ThemeDisplay themeDisplay =(ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
-    	
-    	long scopeGroupId = themeDisplay.getScopeGroupId();
+
+        ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
+
+        long scopeGroupId = themeDisplay.getScopeGroupId();
 
         PortletPreferences prefs = request.getPreferences();
         String wizardArticleIdStr = prefs.getValue("wizardArticleId", "");
 
         boolean hasWizardArticle = false;
-        
+
         try {
-        	hasWizardArticle = journalArticleLocalService.hasArticle(scopeGroupId, wizardArticleIdStr);
-		} catch (SystemException e) {
-			_log.error(e, e);
-		}
-    	
-    	model.addAttribute("contextPath",request.getContextPath());
-		model.addAttribute("scopeGroupId",themeDisplay.getScopeGroupId());
-		model.addAttribute("hasWizardArticle",hasWizardArticle);
-		model.addAttribute("wizardArticleId",wizardArticleIdStr);
-    	
-		return "view_wizard";
+            hasWizardArticle = journalArticleLocalService.hasArticle(scopeGroupId, wizardArticleIdStr);
+        } catch (SystemException e) {
+            _log.error(e, e);
+        }
+
+        model.addAttribute("contextPath", request.getContextPath());
+        model.addAttribute("scopeGroupId", themeDisplay.getScopeGroupId());
+        model.addAttribute("hasWizardArticle", hasWizardArticle);
+        model.addAttribute("wizardArticleId", wizardArticleIdStr);
+
+        return "view_wizard";
     }
-    
+
     /**
-     * Renders the saveHideWizardConfirmation view as Json
+     * Renders the saveHideWizardConfirmation view as Json.
      * 
      * @param model
      *            the model
      * @param request
      *            the request
-     * @param request
+     * @param response
      *            the response
      * @return the view to render
      */
     @RenderMapping(params = "view=saveHideWizardConfirmation")
     public String saveHideWizardConfirmation(Model model, RenderRequest request, RenderResponse response) {
-    	
-		return "view";
+
+        return "view";
     }
 
     /**
-     * Serve resource for saveHideWizard
+     * Serve resource for saveHideWizard.
      * 
      * @param request
      *            the request
@@ -137,16 +137,16 @@ public class UserWizardController {
     @ResourceMapping("saveHideWizard")
     public void saveHideWizard(ResourceRequest request, ResourceResponse response) throws PortletException {
         try {
-        	
-    		ThemeDisplay themeDisplay =(ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
-    		long companyId = themeDisplay.getCompanyId();
-    		long userId = themeDisplay.getUserId();
-        	
-        	boolean hideWizard = ParamUtil.getBoolean(request, "hideWizard", false);
-        	
-        	userExpandoHelper.set(EXPANDO_VALUE_HIDE_RP_WIZARD, hideWizard, companyId, userId);
-        	
-        	response.getWriter().append("{success: true, msg: 'success'}");
+
+            ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
+            long companyId = themeDisplay.getCompanyId();
+            long userId = themeDisplay.getUserId();
+
+            boolean hideWizard = ParamUtil.getBoolean(request, "hideWizard", false);
+
+            userExpandoHelper.set(EXPANDO_VALUE_HIDE_RP_WIZARD, hideWizard, companyId, userId);
+
+            response.getWriter().append("{success: true, msg: 'success'}");
 
             response.setContentType("application/json");
 
@@ -154,9 +154,9 @@ public class UserWizardController {
             e.printStackTrace();
         }
     }
-    
+
     /**
-     * Serve resource for saveHideWizard
+     * Serve resource for saveHideWizard.
      * 
      * @param request
      *            the request
@@ -166,18 +166,21 @@ public class UserWizardController {
      *             the portlet exception
      */
     @ResourceMapping("saveHideWizardLoggedInSession")
-    public void saveHideWizardLoggedInSession(ResourceRequest request, ResourceResponse response) throws PortletException {
+    public void saveHideWizardLoggedInSession(ResourceRequest request, ResourceResponse response)
+            throws PortletException {
         try {
-        	
-    		ThemeDisplay themeDisplay =(ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
-    		long companyId = themeDisplay.getCompanyId();
-    		long userId = themeDisplay.getUserId();
-        	
-        	boolean hideWizardLoggedInSession = ParamUtil.getBoolean(request, "hideWizardLoggedInSession", false);
-        	
-        	userExpandoHelper.set(EXPANDO_VALUE_HIDE_RP_WIZARD_LOGGED_IN_SESSION, hideWizardLoggedInSession, companyId, userId);
-        	
-        	response.getWriter().append("{success: true, msg: 'success'}");
+
+            ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
+            long companyId = themeDisplay.getCompanyId();
+            long userId = themeDisplay.getUserId();
+
+            boolean hideWizardLoggedInSession =
+                    ParamUtil.getBoolean(request, "hideWizardLoggedInSession", false);
+
+            userExpandoHelper.set(EXPANDO_VALUE_HIDE_RP_WIZARD_LOGGED_IN_SESSION, hideWizardLoggedInSession,
+                    companyId, userId);
+
+            response.getWriter().append("{success: true, msg: 'success'}");
 
             response.setContentType("application/json");
 
@@ -185,10 +188,11 @@ public class UserWizardController {
             e.printStackTrace();
         }
     }
-	
+
     private static final String EXPANDO_VALUE_HIDE_RP_WIZARD = "hide_rp_wizard";
-    private static final String EXPANDO_VALUE_HIDE_RP_WIZARD_LOGGED_IN_SESSION = "hide_rp_wizard_logged_in_session";
-    
-	private static Log _log = LogFactoryUtil.getLog(UserWizardController.class);
+    private static final String EXPANDO_VALUE_HIDE_RP_WIZARD_LOGGED_IN_SESSION =
+            "hide_rp_wizard_logged_in_session";
+
+    private static Log log = LogFactoryUtil.getLog(UserWizardController.class);
 
 }
