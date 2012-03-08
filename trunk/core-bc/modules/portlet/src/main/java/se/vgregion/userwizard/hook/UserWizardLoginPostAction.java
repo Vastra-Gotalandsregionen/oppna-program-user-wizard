@@ -19,7 +19,7 @@ import com.liferay.portlet.expando.service.ExpandoValueLocalService;
 
 public class UserWizardLoginPostAction extends Action {
 
-    private static Log log = LogFactoryUtil.getLog(UserWizardLoginPostAction.class);
+    private static Log _log = LogFactoryUtil.getLog(UserWizardLoginPostAction.class);
 
     private ApplicationContext applicationContext;
     private UserLocalService userLocalService;

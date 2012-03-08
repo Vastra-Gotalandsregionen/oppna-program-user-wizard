@@ -129,5 +129,5 @@ public class EditController {
         }
     }
 
-    private static Log log = LogFactoryUtil.getLog(EditController.class);
+    private static Log _log = LogFactoryUtil.getLog(EditController.class);
 }
