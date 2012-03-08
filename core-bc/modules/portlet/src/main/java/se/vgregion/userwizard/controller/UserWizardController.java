@@ -193,6 +193,6 @@ public class UserWizardController {
     private static final String EXPANDO_VALUE_HIDE_RP_WIZARD_LOGGED_IN_SESSION =
             "hide_rp_wizard_logged_in_session";
 
-    private static Log log = LogFactoryUtil.getLog(UserWizardController.class);
+    private static Log _log = LogFactoryUtil.getLog(UserWizardController.class);
 
 }
