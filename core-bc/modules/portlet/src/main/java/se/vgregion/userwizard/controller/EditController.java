@@ -28,6 +28,8 @@ import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portlet.journal.service.JournalArticleLocalService;
 
 /**
+ * The edit controller.
+ * 
  * @author Erik Andersson
  * 
  */
@@ -35,18 +37,32 @@ import com.liferay.portlet.journal.service.JournalArticleLocalService;
 @Controller
 @RequestMapping(value = "EDIT")
 public class EditController {
-	
-	@Autowired
+
+    @Autowired
     private JournalArticleLocalService journalArticleLocalService;
-	
+
+    /**
+     * Do edit.
+     * 
+     * @param request
+     *            the request
+     * @param response
+     *            the response
+     * @return the string
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     * @throws PortletException
+     *             the portlet exception
+     */
     @RenderMapping
-    public String doEdit(RenderRequest request, RenderResponse response) throws IOException,
-            PortletException {
-    	
-    	boolean postedWizardArticleExists = Boolean.parseBoolean(ParamUtil.getString(request, "postedWizardArticleExists", "true"));
-    	boolean isEditResponse = Boolean.parseBoolean(ParamUtil.getString(request, "isEditResponseStr", "false"));
-    	String postedWizardArticleId = ParamUtil.getString(request, "postedWizardArticleId", "");
-    	
+    public String doEdit(RenderRequest request, RenderResponse response) throws IOException, PortletException {
+
+        boolean postedWizardArticleExists =
+                Boolean.parseBoolean(ParamUtil.getString(request, "postedWizardArticleExists", "true"));
+        boolean isEditResponse =
+                Boolean.parseBoolean(ParamUtil.getString(request, "isEditResponseStr", "false"));
+        String postedWizardArticleId = ParamUtil.getString(request, "postedWizardArticleId", "");
+
         PortletPreferences prefs = request.getPreferences();
 
         request.setAttribute("isEditResponse", isEditResponse);
@@ -57,61 +73,61 @@ public class EditController {
         return "edit";
     }
 
-    /*
-     * Sets article value for wizard article in portlet preferences
+    /**
+     * Sets article value for wizard article in portlet preferences.
      * 
-     * @comment
-     * If portlet needs to be used on multiple pages with the same setting,
-     * the implementation should be changed from portlet preferences to
-     * setting the articleId value as an expandoValue for the company.
-     * To to this, use the CommunityExpandoHelper or CompanyExpandoHelper class
-     * After such a change, update doEdit above, and UserWizardController viewWizard
+     * @comment If portlet needs to be used on multiple pages with the same setting, the implementation should be
+     *          changed from portlet preferences to setting the articleId value as an expandoValue for the company.
+     *          To to this, use the CommunityExpandoHelper or CompanyExpandoHelper class After such a change,
+     *          update doEdit above, and UserWizardController viewWizard
      * 
-     * 
-     * */
+     * @param request
+     *            the request
+     * @param response
+     *            the response
+     */
     @ActionMapping(params = "action=savePref")
     public void savePref(ActionRequest request, ActionResponse response) {
-    	
-		ThemeDisplay themeDisplay =(ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
-    	long scopeGroupId = themeDisplay.getScopeGroupId();
+
+        ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
+        long scopeGroupId = themeDisplay.getScopeGroupId();
 
         String wizardArticleIdStr = ParamUtil.getString(request, "wizardArticleId");
-        
+
         boolean hasWizardArticle = false;
-        
+
         try {
-        	hasWizardArticle = journalArticleLocalService.hasArticle(scopeGroupId, wizardArticleIdStr);
-        	
-		} catch (SystemException e) {
-			_log.error(e, e);
-		}
+            hasWizardArticle = journalArticleLocalService.hasArticle(scopeGroupId, wizardArticleIdStr);
 
-		_log.info("EditController - savePref - hasWizardArticle:" + hasWizardArticle);
+        } catch (SystemException e) {
+            _log.error(e, e);
+        }
 
-		if(hasWizardArticle) {
-	        try {
-	            PortletPreferences prefs = request.getPreferences();
-	            prefs.setValue("wizardArticleId", wizardArticleIdStr);
-	            prefs.store();
-	            
-				response.setPortletMode(PortletMode.VIEW);
-	            
-	        } catch (ReadOnlyException e) {
-	            _log.error(e, e);
-	        } catch (IOException e) {
-	        	_log.error(e, e);
-	        } catch (ValidatorException e) {
-	        	_log.error(e, e);
-	        }
-			catch (PortletModeException e) {
-				_log.error(e, e);
-			}
-		} else {
-			response.setRenderParameter("isEditResponseStr", "true");
-			response.setRenderParameter("postedWizardArticleExists", "false");
-			response.setRenderParameter("postedWizardArticleId", wizardArticleIdStr);
-		}
+        _log.info("EditController - savePref - hasWizardArticle:" + hasWizardArticle);
+
+        if (hasWizardArticle) {
+            try {
+                PortletPreferences prefs = request.getPreferences();
+                prefs.setValue("wizardArticleId", wizardArticleIdStr);
+                prefs.store();
+
+                response.setPortletMode(PortletMode.VIEW);
+
+            } catch (ReadOnlyException e) {
+                _log.error(e, e);
+            } catch (IOException e) {
+                _log.error(e, e);
+            } catch (ValidatorException e) {
+                _log.error(e, e);
+            } catch (PortletModeException e) {
+                _log.error(e, e);
+            }
+        } else {
+            response.setRenderParameter("isEditResponseStr", "true");
+            response.setRenderParameter("postedWizardArticleExists", "false");
+            response.setRenderParameter("postedWizardArticleId", wizardArticleIdStr);
+        }
     }
 
-    private static Log _log = LogFactoryUtil.getLog(EditController.class);
+    private static Log log = LogFactoryUtil.getLog(EditController.class);
 }
