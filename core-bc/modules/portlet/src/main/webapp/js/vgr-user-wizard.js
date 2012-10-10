@@ -95,7 +95,11 @@ AUI().add('vgr-user-wizard',function(A) {
 				renderUI: function(){
 					var instance = this;
 					
-					instance._initUserWizard();
+					var winWidth = A.one('body').get('winWidth');
+					
+					if(winWidth > 600) {
+						instance._initUserWizard();	
+					}
 				},
 				
 				bindUI: function(){
