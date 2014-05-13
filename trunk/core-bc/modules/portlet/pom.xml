@@ -6,6 +6,7 @@
     <groupId>se.vgregion.user-wizard</groupId>
     <artifactId>user-wizard-core-bc</artifactId>
     <version>1.1-SNAPSHOT</version>
+    <relativePath>../../pom.xml</relativePath>
   </parent>
   <artifactId>user-wizard-core-bc-module-portlet</artifactId>
   <packaging>war</packaging>
@@ -58,13 +59,13 @@
     <dependency>
       <groupId>com.liferay.portal</groupId>
       <artifactId>util-taglib</artifactId>
-      <version>6.0.5</version>
+      <version>${liferay.version}</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>com.liferay.portal</groupId>
       <artifactId>portal-service</artifactId>
-      <version>6.0.5</version>
+      <version>${liferay.version}</version>
       <scope>provided</scope>
     </dependency>
     <dependency>

@@ -46,7 +46,7 @@ AUI().add('vgr-user-wizard',function(A) {
 			ATTRS: {
 			
 				dialogHeight: {
-					value: 410
+					value: 350
 				},
 				
 				dialogWidth: {
@@ -116,29 +116,31 @@ AUI().add('vgr-user-wizard',function(A) {
 					var instance = this;
 					
 					if(!themeDisplay.isSignedIn()) { return; }
-					
-					var wizardDialog = new A.Dialog({
-						bodyContent: '<div class="user-wizard-article-wrap"></div>',
-						centered: true,
-						constrain2view: true,
-						cssClass: CSS_USER_WIZARD_DIALOG,
-						destroyOnClose: false, //http://issues.liferay.com/browse/AUI-393 setting this to true results in "this.fn is null"
-						height: instance.get(DIALOG_HEIGHT),
-						modal: true,
-						resizable: false,
-						width: instance.get(DIALOG_WIDTH),
-						title: instance.messages.dialog.title,
-						zIndex: 1000,
-						buttons: [
-			                        {
-				                        text: instance.messages.dialog.close,
-				                        handler: function() {
-					                        this.close();
-				                        }
-			                        }
-			            ]
-					}).render();
-					
+
+                    var wizardDialog = new A.Modal({
+                        bodyContent: '<div class="user-wizard-article-wrap"></div>',
+                        centered: true,
+                        headerContent: instance.messages.dialog.title,
+                        height: instance.get(DIALOG_HEIGHT),
+                        modal: true,
+                        toolbars: {
+                            footer: [
+                                {
+                                    label: 'Stäng',
+                                    on: {
+                                        click: function() {
+                                            wizardDialog.hide();
+                                        }
+                                    }
+                                }
+                            ]
+                        },
+                        width: instance.get(DIALOG_WIDTH),
+                        zIndex: 1000
+                    });
+
+                    wizardDialog.render();
+
 					wizardDialog.on('render', instance._onWizardDialogRender, instance, wizardDialog);
 					
 				},
@@ -208,8 +210,7 @@ AUI().add('vgr-user-wizard',function(A) {
 					}
 					
 					contentBox.delegate('click', instance._onControlLinkClick, 'a.user-wizard-show-control', instance, wizardDialog);
-					
-					
+
 					// Save hide wizard for this logged in session
 					var hideWizardLoggedInSession = true; 
 					
